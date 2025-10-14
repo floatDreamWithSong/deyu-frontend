@@ -21,8 +21,6 @@ import { useParams } from "@tanstack/react-router";
 import {
   Copy,
   LoaderCircle,
-  PencilLine,
-  RefreshCcw,
   ThumbsDownIcon,
   ThumbsUpIcon,
 } from "lucide-react";
@@ -44,7 +42,7 @@ export default function ConversationPage() {
   const { conversationId } = useParams({ strict: false });
   const { initMessage, hasProcessed, markAsProcessed, clearInitMessage } =
     useInitMessageStore();
-  const hasInitMessageSubmitted = useRef(false)
+  const [hasInitMessageSubmitted, setHasInitMessageSubmitted] = useState(false);
   const [isReplace, setIsReplace] = useState(false);
   const inlinePromptTextareaRef = useRef<MessageEditorRef>(null);
   const previousMessageIdRef = useRef<string | null>(null);
@@ -67,12 +65,13 @@ export default function ConversationPage() {
 
   useEffect(() => {
     if (initMessage && !hasProcessed) {
-      hasInitMessageSubmitted.current = true
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setHasInitMessageSubmitted(true);
       markAsProcessed();
       const message = initMessage;
       clearInitMessage();
-      sendMessage(message,void 0,()=>{
-        hasInitMessageSubmitted.current = false
+      sendMessage(message, void 0, () => {
+        setHasInitMessageSubmitted(false);
       });
       // 发送消息后清除初始消息
     }
@@ -83,35 +82,35 @@ export default function ConversationPage() {
     clearInitMessage,
     sendMessage,
   ]);
-  const handleRegenerate = () => {
-    const lastUserMessage = messages.find(
-      (message) => message.id === lastUserMessageId.current,
-    );
-    if (!lastUserMessage) return;
-    const message = lastUserMessage.content;
-    if (message && status === "ready") {
-      rollbackMessagesTo(
-        lastUserMessage.id,
-        lastAssistantMessageBranch.length === 0,
-      );
-      setTimeout(() => {
-        sendMessage(message, {
-          completionsOption: { isRegen: true },
-          replyId: lastUserMessage.id,
-        });
-      }, 0);
-    }
-  };
+  // const handleRegenerate = () => {
+  //   const lastUserMessage = messages.find(
+  //     (message) => message.id === lastUserMessageId.current,
+  //   );
+  //   if (!lastUserMessage) return;
+  //   const message = lastUserMessage.content;
+  //   if (message && status === "ready") {
+  //     rollbackMessagesTo(
+  //       lastUserMessage.id,
+  //       lastAssistantMessageBranch.length === 0,
+  //     );
+  //     setTimeout(() => {
+  //       sendMessage(message, {
+  //         completionsOption: { isRegen: true },
+  //         replyId: lastUserMessage.id,
+  //       });
+  //     }, 0);
+  //   }
+  // };
 
-  const handleEditUserMessage = (message: string) => {
-    // 将消息绑定到输入框中
-    setIsReplace(true);
-    // 使用 setTimeout 确保组件已经渲染
-    setTimeout(() => {
-      inlinePromptTextareaRef.current?.setTextContent(message);
-      inlinePromptTextareaRef.current?.focus();
-    }, 0);
-  };
+  // const handleEditUserMessage = (message: string) => {
+  //   // 将消息绑定到输入框中
+  //   setIsReplace(true);
+  //   // 使用 setTimeout 确保组件已经渲染
+  //   setTimeout(() => {
+  //     inlinePromptTextareaRef.current?.setTextContent(message);
+  //     inlinePromptTextareaRef.current?.focus();
+  //   }, 0);
+  // };
 
   const cancelEditUserMessage = () => {
     inlinePromptTextareaRef.current?.blur();
@@ -234,14 +233,14 @@ export default function ConversationPage() {
                             >
                               <Copy className="size-4" />
                             </Action>
-                            <Action
+                            {/* <Action
                               label="Regenerate"
                               onClick={() =>
                                 handleEditUserMessage(message.content)
                               }
                             >
                               <PencilLine className="size-4" />
-                            </Action>
+                            </Action> */}
                           </Actions>
                         )}
                     </div>
@@ -278,10 +277,10 @@ export default function ConversationPage() {
                               : [message]
                             ).map((_message, _, messageArray) => {
                               const forRegenList = messageArray.length > 1;
-                              const regenerateable =
-                                _message.id ===
-                                  lastAssistantMessageId.current ||
-                                messageArray.length > 1;
+                              // const regenerateable =
+                              //   _message.id ===
+                              //     lastAssistantMessageId.current ||
+                              //   messageArray.length > 1;
                               return (
                                 <div key={_message.id}>
                                   <div>
@@ -319,14 +318,14 @@ export default function ConversationPage() {
                                       >
                                         <Copy className="size-4" />
                                       </Action>
-                                      {regenerateable && (
+                                      {/*                                       {regenerateable && (
                                         <Action
                                           label="Regenerate"
                                           onClick={handleRegenerate}
                                         >
                                           <RefreshCcw className="size-4" />
                                         </Action>
-                                      )}
+                                      )} */}
                                       {_message.feedback === 1 ? (
                                         <Action
                                           onClick={handleFeedback.bind(null, {
@@ -400,7 +399,7 @@ export default function ConversationPage() {
           className="mx-auto sticky bottom-4"
           onSubmit={handleSubmit}
           onAbort={abortRequest}
-          status={hasInitMessageSubmitted.current ? "submitted": status}
+          status={hasInitMessageSubmitted ? "submitted" : status}
         />
       </div>
     </div>

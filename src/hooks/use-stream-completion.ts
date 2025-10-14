@@ -13,7 +13,6 @@ import { useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import type { ChatStatus, DeepPartial } from "ai";
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { throttledStream } from "@/utils/throttledStream";
 import { genConversationTitle } from "@/apis/requests/conversation/gen-title";
 import type z from "zod";
 import { modelMap } from "@/app/chat/constants";
@@ -401,7 +400,7 @@ export function useStreamCompletion(conversationId: string) {
         if (!response.body) {
           throw new Error("Empty Body!");
         }
-        const reader = throttledStream(response.body, 20)?.getReader();
+        const reader = response.body.getReader();
         if (!reader) {
           throw new Error("无法读取响应流");
         }
@@ -471,7 +470,7 @@ export function useStreamCompletion(conversationId: string) {
                     aiMessageId = addMessage({
                       id: data.messageId,
                       role: "assistant",
-                      isStreaming: true
+                      isStreaming: true,
                     });
                   }
                   if (data?.replyId !== tempUserMessageId) {

@@ -1,9 +1,6 @@
 "use client";
 import AuthButton from "@/app/auth/components/AuthButton";
 import { AuthInput } from "@/app/auth/components/AuthInput";
-import AppleCompany from "@/components/icons/AppleCompany";
-import Sina from "@/components/icons/Sina";
-import WeChat from "@/components/icons/WeChat";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Link } from "@tanstack/react-router";
@@ -25,7 +22,6 @@ import AuthWrapper from "@/app/auth/components/AuthWrapper";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { sendVerificationCode } from "@/apis/requests/user/code";
-const iconSize = 26;
 
 const formSchema = z.object({
   phone: mobileSchema,
@@ -149,14 +145,3 @@ export default function LoginPage() {
     </>
   );
 }
-
-const Outline = ({ children, ...props }: React.ComponentProps<"button">) => {
-  return (
-    <button
-      {...props}
-      className="p-5 cursor-pointer border border-[#c1c1c9] bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50"
-    >
-      {children}
-    </button>
-  );
-};

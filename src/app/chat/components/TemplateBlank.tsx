@@ -15,7 +15,7 @@ const TemplateBlank = ({
 
   const blanksCount = Math.max(templateArr.length - 1, 0);
   const [blankState, setBlankState] = useState<string[]>(() =>
-    Array.from({ length: blanksCount }, () => "")
+    Array.from({ length: blanksCount }, () => ""),
   );
 
   // 为每个片段与分组生成稳定 key，避免直接使用数组索引作为 key
@@ -24,13 +24,19 @@ const TemplateBlank = ({
     const salt = `${templateArr.length}-${blanksCount}-${templateArr.join("|")}`;
     return templateArr.map((s) => `${s}__${salt}`);
   }, [templateArr, blanksCount]);
-  const groupKeys = useMemo(() => segmentKeys.map((k) => `group__${k}`), [segmentKeys]);
+  const groupKeys = useMemo(
+    () => segmentKeys.map((k) => `group__${k}`),
+    [segmentKeys],
+  );
 
   // 当模板长度变化时，重置/校正本地空白数量
   useEffect(() => {
     if (blanksCount !== blankState.length) {
       setBlankState((prev) => {
-        const next = Array.from({ length: blanksCount }, (_, i) => prev[i] ?? "");
+        const next = Array.from(
+          { length: blanksCount },
+          (_, i) => prev[i] ?? "",
+        );
         return next;
       });
     }
@@ -52,23 +58,24 @@ const TemplateBlank = ({
       .replace(/\s{2,}/g, " ") // 折叠多空格
       .trim();
 
-  const handleInputAt = (blankIndex: number) => (e: React.FormEvent<HTMLSpanElement>) => {
-    if (!isEditable) return;
-    const target = e.currentTarget as HTMLSpanElement;
-    const newValue = sanitizeText(target.innerText);
-    setBlankState((prev) => {
-      const next = prev.slice();
-      next[blankIndex] = newValue;
-      // 计算并在微任务/下一拍调度回传，避免在渲染阶段更新父组件
-      const prompt = composePrompt(next);
-      if (typeof queueMicrotask === "function") {
-        queueMicrotask(() => setValue(prompt));
-      } else {
-        setTimeout(() => setValue(prompt), 0);
-      }
-      return next;
-    });
-  };
+  const handleInputAt =
+    (blankIndex: number) => (e: React.FormEvent<HTMLSpanElement>) => {
+      if (!isEditable) return;
+      const target = e.currentTarget as HTMLSpanElement;
+      const newValue = sanitizeText(target.innerText);
+      setBlankState((prev) => {
+        const next = prev.slice();
+        next[blankIndex] = newValue;
+        // 计算并在微任务/下一拍调度回传，避免在渲染阶段更新父组件
+        const prompt = composePrompt(next);
+        if (typeof queueMicrotask === "function") {
+          queueMicrotask(() => setValue(prompt));
+        } else {
+          setTimeout(() => setValue(prompt), 0);
+        }
+        return next;
+      });
+    };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLSpanElement>) => {
     if (!isEditable) return;

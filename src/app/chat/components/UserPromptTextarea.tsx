@@ -37,10 +37,10 @@ export default function UserPromptTextarea({
       e.preventDefault();
       const target = e.target as HTMLSpanElement;
       const newValue = target.textContent ?? "";
-      console.log(newValue)
+      console.log(newValue);
       setValue(newValue.trim());
     },
-    [status, disabled]
+    [status, disabled],
   );
   const handlePaste = (e: React.ClipboardEvent<HTMLSpanElement>) => {
     if (status !== "ready" || disabled) return;
@@ -60,8 +60,13 @@ export default function UserPromptTextarea({
   return (
     <PromptInput
       onKeyDown={(e) => {
-        if (e.key === "Enter" && !e.ctrlKey && status === "ready" && !disabled) {
-          e.preventDefault()
+        if (
+          e.key === "Enter" &&
+          !e.ctrlKey &&
+          status === "ready" &&
+          !disabled
+        ) {
+          e.preventDefault();
           const textContent = value;
           onSubmit?.(textContent, () => {
             setValue("");
@@ -74,7 +79,7 @@ export default function UserPromptTextarea({
       onSubmit={(e) => {
         e.preventDefault();
         if (status === "ready" && !disabled) {
-          console.log('submiot')
+          console.log("submiot");
           const textContent = value;
           onSubmit?.(textContent, () => {
             setValue("");
@@ -89,7 +94,7 @@ export default function UserPromptTextarea({
       className={cn(
         "relative flex flex-col divide-none p-2 border-4 mb-4",
         "shadow-none border-primary/30 max-w-[1000px] aspect-[4/1]",
-        className
+        className,
       )}
     >
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}

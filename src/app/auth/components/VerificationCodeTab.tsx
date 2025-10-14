@@ -80,7 +80,7 @@ export default function VerificationCodeTab({
         },
       },
     );
-  }, [sendCodeMutation.mutate, phone, form.setError]);
+  }, [sendCodeMutation, phone, form]);
   function onSubmit(data: z.infer<typeof FormSchema>) {
     loginMutation.mutate(
       {

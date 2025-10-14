@@ -93,14 +93,14 @@ export default function ChatPage() {
               model === card.model
                 ? "scale-105"
                 : model !== "deyu-default"
-                ? "brightness-75"
-                : "",
+                  ? "brightness-75"
+                  : "",
             ])}
-            onClick={() => {
+            onClick={() => 
               model === card.model
                 ? setModel("deyu-default", "")
-                : setModel(card.model, card.name);
-            }}
+                : setModel(card.model, card.name)
+            }
             key={card.name}
             {...card}
           />
