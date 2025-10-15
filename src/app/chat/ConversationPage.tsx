@@ -32,10 +32,10 @@ import {
   BranchNext,
   BranchSelector,
 } from "@/components/ai-elements/branch";
-import H5ConversationPage from "../h5/chat/H5ConversationPage";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-function ConversationPagePC() {
+export default function ConversationPagePC() {
+  const isMobile = useIsMobile();
   const { conversationId } = useParams({ strict: false });
   const { initMessage, hasProcessed, markAsProcessed, clearInitMessage } =
     useInitMessageStore();
@@ -130,14 +130,14 @@ function ConversationPagePC() {
             completionsOption: {
               isReplace,
               selectedRegenId: lastAssistantMessageBranch.length
-                ? (selectBranchIdRef.current ??
+                ? selectBranchIdRef.current ??
                   lastAssistantMessageBranch[
                     lastAssistantMessageBranch.length - 1
-                  ].id)
+                  ].id
                 : undefined,
             },
           },
-          onSuccess,
+          onSuccess
         );
       }, 0);
     }
@@ -164,7 +164,7 @@ function ConversationPagePC() {
             fetchEarlier();
           }
         },
-        { root: null, threshold: 0 },
+        { root: null, threshold: 0 }
       );
       observer.observe(el);
       return () => observer.disconnect();
@@ -172,7 +172,7 @@ function ConversationPagePC() {
     [fetchEarlier, hasMoreEarlier, isFetchingEarlier],
     {
       wait: 800,
-    },
+    }
   );
   useEffect(() => {
     const el = topSentinelRef.current;
@@ -370,7 +370,10 @@ function ConversationPagePC() {
                                         </>
                                       )}
                                       {messageArray.length > 1 && (
-                                        <BranchSelector from="assistant" className="p-0 self-center">
+                                        <BranchSelector
+                                          from="assistant"
+                                          className="p-0 self-center"
+                                        >
                                           <BranchPrevious />
                                           <BranchPage />
                                           <BranchNext />
@@ -393,7 +396,11 @@ function ConversationPagePC() {
           <ConversationScrollButton />
         </Conversation>
         <UserPromptTextarea
-          className="mx-auto sticky bottom-4"
+          className={
+            isMobile
+              ? "mx-auto sticky bottom-4 cursor-text aspect-auto max-h-42 min-h-24"
+              : "mx-auto sticky bottom-4"
+          }
           onSubmit={handleSubmit}
           onAbort={abortRequest}
           status={hasInitMessageSubmitted ? "submitted" : status}
@@ -401,12 +408,4 @@ function ConversationPagePC() {
       </div>
     </div>
   );
-}
-
-export default function ConversationPage() {
-  const isMobile = useIsMobile()
-  if(isMobile) {
-    return <H5ConversationPage />
-  }
-  return <ConversationPagePC />
 }
