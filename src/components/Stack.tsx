@@ -27,11 +27,11 @@ function CardRotate({ children, onSendToBack, sensitivity }: CardRotateProps) {
   return (
     <motion.div
       className="absolute cursor-grab"
-      style={{ x, y }}
+      style={{ translateX: x, translateY: y, willChange: 'transform' }}
       drag
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
       dragElastic={0.3}
-      whileTap={{ cursor: "grabbing", opacity: 0.7, scale: 0.9 }}
+      whileTap={{ cursor: "grabbing", scale: 0.9 }}
       onDragEnd={handleDragEnd}
     >
       {children}
@@ -54,7 +54,7 @@ export default function Stack({
   randomRotation = false,
   sensitivity = 200,
   cards = [],
-  animationConfig = { stiffness: 260, damping: 20 },
+  animationConfig = { stiffness: 180, damping: 26 },
   sendToBackOnClick = false,
   sendToBack,
   className,
