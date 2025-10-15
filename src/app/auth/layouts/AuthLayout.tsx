@@ -1,3 +1,4 @@
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Outlet } from "@tanstack/react-router";
 import {
   createContext,
@@ -21,6 +22,10 @@ export const AuthContext = createContext<{
 export default function AuthLayout() {
   const [phone, setPhone] = useState("");
   const [verificationCode, setverificationCode] = useState("");
+  const isMobile = useIsMobile()
+  if(isMobile) {
+    return <Outlet />
+  } 
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed relative grid grid-cols-2"

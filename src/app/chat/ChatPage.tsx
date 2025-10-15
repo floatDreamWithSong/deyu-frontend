@@ -9,6 +9,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import AgentCard from "./components/AgentCard";
 import { cn } from "@/lib/utils";
 import { cardList } from "./constants";
+import H5ChatPage from "../h5/chat/H5ChatPage";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ChatPage() {
   const navigate = useNavigate();
@@ -52,7 +54,10 @@ export default function ChatPage() {
       }
     }
   };
-
+  const isMobile = useIsMobile()
+  if(isMobile) {
+    return <H5ChatPage />
+  }
   return (
     <div className="mx-8 grid grid-rows-9 py-20 h-full">
       <div className="row-span-1 self-center space-y-6 text-center">

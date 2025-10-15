@@ -32,8 +32,10 @@ import {
   BranchNext,
   BranchSelector,
 } from "@/components/ai-elements/branch";
+import H5ConversationPage from "../h5/chat/H5ConversationPage";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-export default function ConversationPage() {
+function ConversationPagePC() {
   const { conversationId } = useParams({ strict: false });
   const { initMessage, hasProcessed, markAsProcessed, clearInitMessage } =
     useInitMessageStore();
@@ -399,4 +401,12 @@ export default function ConversationPage() {
       </div>
     </div>
   );
+}
+
+export default function ConversationPage() {
+  const isMobile = useIsMobile()
+  if(isMobile) {
+    return <H5ConversationPage />
+  }
+  return <ConversationPagePC />
 }

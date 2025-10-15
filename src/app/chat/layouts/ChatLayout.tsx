@@ -12,10 +12,15 @@ import { Outlet } from "@tanstack/react-router";
 import gsap from "gsap";
 import { useRef } from "react";
 import Collapse from "../components/collapse";
+import Layout from "@/app/h5/chat/layout";
 
 const sidebarWidth = "380px";
 
 export default function ChatLayout() {
+  const isMobile = useIsMobile()
+  if(isMobile) {
+    return <Layout />
+  }
   return (
     <div
       style={{ backgroundImage: "url(/chat/bg.png)" }}

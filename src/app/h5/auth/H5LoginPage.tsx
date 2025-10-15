@@ -119,7 +119,7 @@ export default function H5LoginPage() {
   };
   return (
     <div
-      className="h-screen w-screen overflow-hidden flex flex-col justify-center bg-cover bg-center bg-no-repeat"
+      className="h-screen w-screen overflow-hidden flex flex-col justify-center bg-cover bg-center bg-no-repeat items-center"
       style={{ backgroundImage: "url(/chat/h5-bg.png)" }}
     >
       <div className="flex items-center justify-center rounded-t-2xl relative">

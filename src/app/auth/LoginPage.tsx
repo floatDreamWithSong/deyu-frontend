@@ -22,6 +22,8 @@ import AuthWrapper from "@/app/auth/components/AuthWrapper";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { sendVerificationCode } from "@/apis/requests/user/code";
+import { useIsMobile } from "@/hooks/use-mobile";
+import H5LoginPage from "../h5/auth/H5LoginPage";
 
 const formSchema = z.object({
   phone: mobileSchema,
@@ -64,6 +66,10 @@ export default function LoginPage() {
       }
     );
   };
+  const isMobile = useIsMobile()
+  if(isMobile) {
+    return <H5LoginPage />
+  }
   return (
     <>
       {!isVerificationStage ? (
