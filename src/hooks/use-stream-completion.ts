@@ -381,7 +381,6 @@ export function useStreamCompletion(conversationId: string) {
       };
 
       try {
-        let tempUserMessageId = addMessage({ content, role: "user" });
         const token = tokenStore.get();
         const response = await fetch(`${BASE_URL}/v1/completions`, {
           method: "POST",
@@ -396,6 +395,7 @@ export function useStreamCompletion(conversationId: string) {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+        let tempUserMessageId = addMessage({ content, role: "user" });
 
         if (!response.body) {
           throw new Error("Empty Body!");

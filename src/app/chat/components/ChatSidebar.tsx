@@ -280,17 +280,20 @@ export default function ChatSidebar() {
   function handleDeleteConversation(id: string) {
     deleteMutation.mutate({ conversationId: id });
   }
+  const { isMobile } = useSidebar();
   return (
     <Sidebar
       className="px-10 py-20 ease-out duration-400 style__scoller"
       variant="floating"
     >
       <SidebarHeader className="space-y-4 relative">
-        <img
-          src="/chat/bot.png"
-          alt="bot"
-          className="absolute left-2 h-[5.6rem] top-0 -translate-y-7/12"
-        />
+        {!isMobile && (
+          <img
+            src="/chat/bot.png"
+            alt="bot"
+            className="absolute left-2 h-[5.6rem] top-0 -translate-y-7/12"
+          />
+        )}
         <div className="flex items-center justify-around px-2 gap-2 pt-10">
           <div className="flex items-center gap-2">
             <h2 className="text-primary font-semibold text-2xl">

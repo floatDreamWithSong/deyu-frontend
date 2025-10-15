@@ -1,11 +1,15 @@
-import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
+import {
+  createRoute,
+  lazyRouteComponent,
+  Outlet,
+} from "@tanstack/react-router";
 import { rootRoute } from "@/route";
 
 // Auth routes
 const authRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/auth",
-  component: lazyRouteComponent(() => import("./layouts/AuthLayout")),
+  component: () => <Outlet />,
 });
 
 const loginRoute = createRoute({
@@ -14,8 +18,8 @@ const loginRoute = createRoute({
   validateSearch: (search) => ({
     redirect: (search.redirect as string) || "/chat",
   }),
-  component: lazyRouteComponent(() => import("./LoginPage")),
+  component: lazyRouteComponent(() => import("./H5LoginPage")),
 });
-const authRouteTree = authRoute.addChildren([loginRoute]);
+const h5AuthRouteTree = authRoute.addChildren([loginRoute]);
 
-export default authRouteTree;
+export default h5AuthRouteTree;

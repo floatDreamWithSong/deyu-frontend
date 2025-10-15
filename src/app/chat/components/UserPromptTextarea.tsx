@@ -49,14 +49,14 @@ export default function UserPromptTextarea({
     document.execCommand("insertText", false, text); // 3. 当成文本插入
   };
   // 只在初始渲染时设置内容，之后让用户直接编辑
-  const [isInitialized, setIsInitialized] = useState(false);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (spanRef.current && !isInitialized) {
+    if (spanRef.current && !isInitialized.current) {
+      isInitialized.current = true;
       spanRef.current.textContent = value;
-      setIsInitialized(true);
     }
-  }, [value, isInitialized]);
+  }, [value]);
   return (
     <PromptInput
       onKeyDown={(e) => {
@@ -107,7 +107,7 @@ export default function UserPromptTextarea({
           spanRef.current?.focus();
         }}
       >
-        <div className="inline m-2 mt-0 ">
+        <div className="inline m-2 mt-0 float-left h-4">
           {!!modelName && (
             <span className="text-primary p-1 mr-1">
               <Bot className="size-6 inline stoke-3 stroke-primary -translate-y-1 mr-1" />
@@ -174,19 +174,17 @@ export default function UserPromptTextarea({
             <Paperclip size={16} />
           </PromptInputButton> */}
         </div>
-        <div>
-          {/* <PromptInputButton
+        {/* <PromptInputButton
             variant={"outline"}
             className="rounded-full border-0"
           >
             <MicIcon size={16} />
           </PromptInputButton> */}
-          <PromptInputSubmit
-            className="rounded-full"
-            status={status}
-            disabled={disabled}
-          />
-        </div>
+        <PromptInputSubmit
+          className="rounded-full right-4 bottom-4"
+          status={status}
+          disabled={disabled}
+        />
       </div>
     </PromptInput>
   );

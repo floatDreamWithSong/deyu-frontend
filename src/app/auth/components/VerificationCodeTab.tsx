@@ -14,7 +14,6 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import AuthWrapper from "./AuthWrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -37,7 +36,9 @@ const FormSchema = z.object({
 
 export default function VerificationCodeTab({
   onBack,
-}: { onBack: () => void }) {
+}: {
+  onBack: () => void;
+}) {
   const { phone } = useContext(AuthContext);
   const navigate = useNavigate();
   const search = useSearch({ from: "/auth/login" });
@@ -78,7 +79,7 @@ export default function VerificationCodeTab({
           setCountDown(60);
           toast("验证码已重新发送");
         },
-      },
+      }
     );
   }, [sendCodeMutation, phone, form]);
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -103,12 +104,12 @@ export default function VerificationCodeTab({
             to: redirectUrl,
           });
         },
-      },
+      }
     );
   }
 
   return (
-    <AuthWrapper className="aspect-[25/23] grid grid-rows-4">
+    <>
       <div className="row-span-2 items-center justify-center flex flex-col gap-3">
         <h3 className="text-2xl font-semibold relative w-full text-center">
           <Button
@@ -169,6 +170,6 @@ export default function VerificationCodeTab({
       >
         重新发送{countDown > 0 ? `${countDown}s` : ""}
       </Button>
-    </AuthWrapper>
+    </>
   );
 }

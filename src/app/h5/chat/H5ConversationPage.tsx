@@ -22,7 +22,7 @@ import { Copy, LoaderCircle, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import MessageEditor, {
   type MessageEditorRef,
-} from "./components/MessageEditor";
+} from "@/app/chat/components/MessageEditor";
 import { useDebounceEffect } from "ahooks";
 import {
   Branch,
@@ -391,7 +391,7 @@ export default function ConversationPage() {
           <ConversationScrollButton />
         </Conversation>
         <UserPromptTextarea
-          className="mx-auto sticky bottom-4"
+          className="mx-auto sticky bottom-4 cursor-text aspect-auto max-h-42 min-h-24"
           onSubmit={handleSubmit}
           onAbort={abortRequest}
           status={hasInitMessageSubmitted ? "submitted" : status}

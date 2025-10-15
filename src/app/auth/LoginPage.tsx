@@ -61,7 +61,7 @@ export default function LoginPage() {
           setVerificationStage(true);
           toast("验证码已发送");
         },
-      },
+      }
     );
   };
   return (
@@ -103,7 +103,7 @@ export default function LoginPage() {
                     className="border-primary"
                     onCheckedChange={(checked) =>
                       setIsChecked(
-                        checked === "indeterminate" ? false : checked,
+                        checked === "indeterminate" ? false : checked
                       )
                     }
                   />
@@ -140,7 +140,9 @@ export default function LoginPage() {
           </div>
         </AuthWrapper>
       ) : (
-        <VerificationCodeTab onBack={handleSwitchBack} />
+        <AuthWrapper className="aspect-[25/23] grid grid-rows-4">
+          <VerificationCodeTab onBack={handleSwitchBack} />
+        </AuthWrapper>
       )}
     </>
   );

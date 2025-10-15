@@ -1,11 +1,11 @@
 import type { AvaliableModelName } from "@/store/initMessage";
-
-export const cardList: {
+export type Card = {
   name: string;
   description: string;
   imgUrl: string;
   model: AvaliableModelName;
-}[] = [
+};
+export const cardList: Card[] = [
   {
     name: "润心桥",
     description:

@@ -8,6 +8,8 @@ import authRouteTree from "./app/auth/route";
 import chatRouteTree from "./app/chat/route";
 import authenticatedRoute from "./app/_authenticated/route";
 import type { UserCredentials } from "./apis/requests/user/schema";
+import h5AuthRouteTree from "./app/h5/auth/route";
+import h5ChatRouteTree from "./app/h5/chat/route";
 
 // 定义认证状态接口
 interface AuthState {
@@ -38,9 +40,10 @@ const indexRoute = createRoute({
     return null;
   },
 });
-
 export const routeTree = rootRoute.addChildren([
   indexRoute,
-  authRouteTree,
-  authenticatedRoute.addChildren([chatRouteTree]),
+  import.meta.env.VITE_PLATFORM === "h5" ? h5AuthRouteTree : authRouteTree,
+  authenticatedRoute.addChildren([
+    import.meta.env.VITE_PLATFORM === "h5" ? h5ChatRouteTree : chatRouteTree,
+  ]),
 ]);

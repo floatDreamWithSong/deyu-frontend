@@ -32,6 +32,7 @@ const TemplateBlank = ({
   // 当模板长度变化时，重置/校正本地空白数量
   useEffect(() => {
     if (blanksCount !== blankState.length) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBlankState((prev) => {
         const next = Array.from(
           { length: blanksCount },

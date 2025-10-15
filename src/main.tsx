@@ -45,10 +45,14 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
         <RouterProvider router={router} />
-        <Toaster />
+        {import.meta.env.VITE_PLATFORM === "h5" ? (
+          <Toaster position={"top-center"} />
+        ) : (
+          <Toaster />
+        )}
         <ReactQueryDevtools />
       </TanStackQueryProvider.Provider>
-    </StrictMode>,
+    </StrictMode>
   );
 }
 

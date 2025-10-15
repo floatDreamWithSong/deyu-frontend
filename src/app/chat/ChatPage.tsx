@@ -96,7 +96,7 @@ export default function ChatPage() {
                   ? "brightness-75"
                   : "",
             ])}
-            onClick={() => 
+            onClick={() =>
               model === card.model
                 ? setModel("deyu-default", "")
                 : setModel(card.model, card.name)
