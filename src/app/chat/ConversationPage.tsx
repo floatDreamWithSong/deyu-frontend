@@ -251,11 +251,13 @@ export default function ConversationPagePC() {
                   )
                 ) : (
                   <div className="flex gap-3">
-                    <div>
-                      <div className="size-10 order-1 rounded-full overflow-hidden">
-                        <img src="/logo.jpg" alt="张江高科·高科芯" />
+                    {!isMobile && (
+                      <div>
+                        <div className="size-10 order-1 rounded-full overflow-hidden">
+                          <img src="/logo.jpg" alt="张江高科·高科芯" />
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="flex flex-col bg-white style__shallow-shadow rounded-3xl">
                       <MessageContent>
                         <Branch
