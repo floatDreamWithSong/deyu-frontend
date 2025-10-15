@@ -9,6 +9,7 @@ import reportWebVitals from "./reportWebVitals.ts";
 import { routeTree } from "./route.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useIsMobile } from "./hooks/use-mobile.ts";
 
 scan({
   enabled: false,
@@ -39,21 +40,22 @@ declare module "@tanstack/react-router" {
 }
 
 const rootElement = document.getElementById("app");
+const Toast = () => {
+  const isMobile = useIsMobile();
+  return isMobile ? <Toaster position={"top-center"} /> : <Toaster />;
+};
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
         <RouterProvider router={router} />
-        {import.meta.env.VITE_PLATFORM === "h5" ? (
-          <Toaster position={"top-center"} />
-        ) : (
-          <Toaster />
-        )}
+        <Toast />
         <ReactQueryDevtools />
       </TanStackQueryProvider.Provider>
     </StrictMode>
   );
 }
+
 
 reportWebVitals();
