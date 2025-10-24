@@ -11,6 +11,7 @@ export const userInfoStore = create<User>()(
       expire: -1,
       token: "",
       userId: "",
+      "new": false,
       setCredentials: (data: Pick<UserCredentials, "expire" | "token">) => {
         localStorage.setItem(TOKEN_KEY, data.token);
         set(data);

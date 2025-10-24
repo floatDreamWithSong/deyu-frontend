@@ -8,6 +8,6 @@ export const CredentialsSchema = z.object({
   expire: z.number(),
   token: z.string(),
   userId: z.string(),
-  new: z.boolean().default(false),
+  "new": z.boolean().default(false),
 });
 export type UserCredentials = z.infer<typeof CredentialsSchema>;

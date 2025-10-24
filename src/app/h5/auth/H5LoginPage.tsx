@@ -109,6 +109,17 @@ export default function H5LoginPage() {
         onSuccess(data) {
           toast.success("登录成功");
           userInfo.setCredentials(data);
+          if (data.new) {
+            // 提醒需要设置密码
+            toast.success("请设置密码");
+            navigate({
+              to: "/auth/login/password/set",
+              search: {
+                redirect: "/chat",
+              },
+            });
+            return;
+          }
           // 默认跳转到 /chat
           navigate({
             to: "/chat",
