@@ -18,7 +18,7 @@ function LayoutContent() {
           <div className="space-y-4 transform w-full flex flex-col items-center">
             <img
               src="/fake-auth-title.png"
-              className="w-2/3"
+              className="w-4/5"
               alt="张江高科德育大模型"
             />
           </div>

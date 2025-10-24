@@ -24,13 +24,13 @@ import { useMutation } from "@tanstack/react-query";
 import { sendVerificationCode } from "@/apis/requests/user/code";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import H5LoginPage from "../h5/auth/H5LoginPage";
+import H5LoginPage from "@/app/h5/auth/H5LoginPage";
 // const iconSize = 26;
 
 const formSchema = z.object({
   phone: mobileSchema,
 });
-export default function LoginPagePC() {
+function LoginPagePC() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -160,8 +160,9 @@ export default function LoginPagePC() {
   );
 }
 
-export function LoginPage(){
+export default function LoginPage(){
   const isMobile = useIsMobile();
+  console.log(isMobile);
   if(isMobile) {
     return <H5LoginPage />;
   }
