@@ -1,6 +1,17 @@
 import { cn } from "@/lib/utils";
 import "./agent-card.css";
 
+// 处理文本中的 [] 符号，将其内容加粗
+export const formatDescription = (text: string) => {
+  const parts = text.split(/(\[.*?\])/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('[') && part.endsWith(']')) {
+      return <strong key={`bold-${index}-${part}`}>{part.slice(1, -1)}</strong>;
+    }
+    return <span key={`text-${index}-${part}`}>{part}</span>;
+  });
+};
+
 export default function AgentCard({
   name,
   description,
@@ -34,9 +45,9 @@ export default function AgentCard({
             lineHeight: "1.3",
             fontSize: "14px",
           }}
-          className="@xs:line-clamp-4 whitespace-pre-wrap @3xs:line-clamp-3 @[12rem]:line-clamp-2 line-clamp-1 text-muted-foreground break-words indent-8"
+          className="@xs:line-clamp-4 whitespace-pre-wrap @3xs:line-clamp-3 @[12rem]:line-clamp-2 line-clamp-1 text-muted-foreground break-words"
         >
-          {description}
+          {formatDescription(description)}
         </p>
       </div>
     </div>

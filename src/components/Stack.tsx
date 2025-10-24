@@ -1,3 +1,4 @@
+import { formatDescription } from "@/app/chat/components/AgentCard";
 import type { Card } from "@/app/chat/constants";
 import { cn } from "@/lib/utils";
 import { motion, useMotionValue } from "motion/react";
@@ -103,7 +104,7 @@ export default function Stack({
               </div>
               <p className="p-4 text-gray-600 text-center" style={{
                 fontSize: 18
-              }}>{card.description}</p>
+              }}>{formatDescription(card.description)}</p>
             </motion.div>
           </CardRotate>
         );
