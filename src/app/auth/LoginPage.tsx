@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useContext, useState } from "react";
-import { AuthContext } from "@/app/auth/layouts/AuthLayout";
+import { AuthContext } from "@/app/auth/context";
 import z from "zod";
 import { mobileSchema } from "@/utils/schema";
 import { useForm } from "react-hook-form";
@@ -23,12 +23,14 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { sendVerificationCode } from "@/apis/requests/user/code";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 import H5LoginPage from "../h5/auth/H5LoginPage";
+// const iconSize = 26;
 
 const formSchema = z.object({
   phone: mobileSchema,
 });
-export default function LoginPage() {
+export default function LoginPagePC() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,7 +48,7 @@ export default function LoginPage() {
   });
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     if (!isChecked) {
-      toast("请勾选使用协议与隐私协议");
+      toast.info("请勾选使用协议与隐私协议");
       return;
     }
     authContext.setPhone(data.phone);
@@ -56,9 +58,6 @@ export default function LoginPage() {
         authType: "phone",
       },
       {
-        onError() {
-          toast.error("验证码发送失败");
-        },
         onSuccess() {
           setVerificationStage(true);
           toast("验证码已发送");
@@ -66,22 +65,21 @@ export default function LoginPage() {
       }
     );
   };
-  const isMobile = useIsMobile()
-  if(isMobile) {
-    return <H5LoginPage />
-  }
   return (
     <>
       {!isVerificationStage ? (
         <AuthWrapper>
-          <div className="grid grid-rows-3 h-full items-center gap-y-10">
-            <h3 className="text-3xl font-bold text-primary row-span-1 w-full text-center">
-              欢迎登录
+          <div className="flex flex-col h-full items-center">
+            <h3 className="text-2xl font-bold w-full h-fit my-10 text-center">
+              验证登录
             </h3>
+
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleSubmit)}
-                className="row-span-1 w-full space-y-6"
+                className={cn([
+                  "w-full space-y-6 flex-1 flex flex-col justify-center",
+                ])}
               >
                 <FormField
                   control={form.control}
@@ -95,11 +93,8 @@ export default function LoginPage() {
                     </FormItem>
                   )}
                 />
-                <AuthButton disabled={sendCodeMutation.isPending} type="submit">
-                  下一步
-                </AuthButton>
                 <div
-                  className="justify-center flex items-center gap-2"
+                  className="justify-center flex items-center gap-2 pb-6"
                   style={{
                     letterSpacing: "0.5px",
                   }}
@@ -114,7 +109,7 @@ export default function LoginPage() {
                     }
                   />
                   <Label className="gap-0.5">
-                    我已阅读并同意
+                    已阅读并同意
                     <Link
                       to="."
                       className="text-black font-bold underline-offset-4 hover:underline"
@@ -130,10 +125,23 @@ export default function LoginPage() {
                     </Link>
                   </Label>
                 </div>
+                <AuthButton disabled={sendCodeMutation.isPending} type="submit">
+                  下一步
+                </AuthButton>
+                <AuthButton variant={"secondary"} asChild>
+                  <Link
+                    search={{
+                      redirect: "/chat",
+                    }}
+                    to="/auth/login/password"
+                  >
+                    密码登录
+                  </Link>
+                </AuthButton>
               </form>
             </Form>
-            <div className="[&>button]:rounded-full flex justify-between px-4 items-end h-full">
-              {/* <Outline>
+            {/* <div className="[&>button]:rounded-full flex justify-between px-4 items-end h-full">
+              <Outline>
                 <AppleCompany size={iconSize} />
               </Outline>
               <Outline>
@@ -141,15 +149,21 @@ export default function LoginPage() {
               </Outline>
               <Outline>
                 <Sina size={iconSize} />
-              </Outline> */}
-            </div>
+              </Outline>
+            </div> */}
           </div>
         </AuthWrapper>
       ) : (
-        <AuthWrapper className="aspect-[25/23] grid grid-rows-4">
-          <VerificationCodeTab onBack={handleSwitchBack} />
-        </AuthWrapper>
+        <VerificationCodeTab onBack={handleSwitchBack} />
       )}
     </>
   );
+}
+
+export function LoginPage(){
+  const isMobile = useIsMobile();
+  if(isMobile) {
+    return <H5LoginPage />;
+  }
+  return <LoginPagePC />;
 }

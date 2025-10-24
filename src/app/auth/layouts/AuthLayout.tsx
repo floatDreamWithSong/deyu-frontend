@@ -1,31 +1,32 @@
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Outlet } from "@tanstack/react-router";
-import {
-  createContext,
-  useState,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { useState } from "react";
+import { AuthContext } from "../context";
 
-export const AuthContext = createContext<{
-  phone: string;
-  verificationCode: string;
-  setPhone: Dispatch<SetStateAction<string>>;
-  setverificationCode: Dispatch<SetStateAction<string>>;
-}>({
-  phone: "",
-  verificationCode: "",
-  setPhone: () => {},
-  setverificationCode: () => {},
-});
-
-export default function AuthLayout() {
+function LayoutContent() {
   const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
   const [verificationCode, setverificationCode] = useState("");
-  const isMobile = useIsMobile()
-  if(isMobile) {
-    return <Outlet />
-  } 
+  const isMobile = useIsMobile();
+  if (isMobile) {
+    return (
+      <div
+        className="h-screen w-screen overflow-hidden flex flex-col pt-30 bg-cover bg-center bg-no-repeat items-center"
+        style={{ backgroundImage: "url(/chat/h5-bg.png)" }}
+      >
+        <div className="flex items-center justify-center rounded-t-2xl relative">
+          <div className="space-y-4 transform w-full flex flex-col items-center">
+            <img
+              src="/fake-auth-title.png"
+              className="w-2/3"
+              alt="张江高科德育大模型"
+            />
+          </div>
+        </div>
+        <Outlet />
+      </div>
+    );
+  }
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed relative grid grid-cols-2"
@@ -54,11 +55,33 @@ export default function AuthLayout() {
             verificationCode,
             setPhone,
             setverificationCode,
+            password,
+            setPassword,
           }}
         >
           <Outlet />
         </AuthContext.Provider>
       </div>
     </div>
+  );
+}
+
+export default function AuthLayout() {
+  const [phone, setPhone] = useState("");
+  const [verificationCode, setverificationCode] = useState("");
+  const [password, setPassword] = useState("");
+  return (
+    <AuthContext.Provider
+      value={{
+        phone,
+        verificationCode,
+        password,
+        setPhone,
+        setverificationCode,
+        setPassword,
+      }}
+    >
+      <LayoutContent />
+    </AuthContext.Provider>
   );
 }

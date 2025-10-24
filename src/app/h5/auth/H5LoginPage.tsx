@@ -19,7 +19,7 @@ import {
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { sendVerificationCode } from "@/apis/requests/user/code";
-import { loginByPhoneVerify } from "@/apis/requests/user/verifiy";
+import { RequestVerify } from "@/apis/requests/user/verifiy";
 import { userInfoStore } from "@/store/user";
 import AuthWrapper from "@/app/auth/components/AuthWrapper";
 
@@ -59,7 +59,7 @@ export default function H5LoginPage() {
   });
 
   const loginMutation = useMutation({
-    mutationFn: loginByPhoneVerify,
+    mutationFn: RequestVerify,
   });
 
   // 发送验证码逻辑
@@ -69,7 +69,7 @@ export default function H5LoginPage() {
       toast.error("请先输入手机号");
       return;
     }
-    
+
     sendCodeMutation.mutate(
       {
         authId: phone,
@@ -93,7 +93,7 @@ export default function H5LoginPage() {
       toast("请勾选使用协议与隐私协议");
       return;
     }
-    
+
     loginMutation.mutate(
       {
         verify: data.pin,
@@ -118,101 +118,95 @@ export default function H5LoginPage() {
     );
   };
   return (
-    <div
-      className="h-screen w-screen overflow-hidden flex flex-col justify-center bg-cover bg-center bg-no-repeat items-center"
-      style={{ backgroundImage: "url(/chat/h5-bg.png)" }}
-    >
-      <div className="flex items-center justify-center rounded-t-2xl relative">
-        <div className="space-y-4 transform w-full flex flex-col items-center">
-          <img
-            src="/fake-auth-title.png"
-            className="w-2/3"
-            alt="张江高科德育大模型"
-          />
-        </div>
-      </div>
-      <div className="mt-16 relative">
-        <AuthWrapper className="bg-transparent">
-          <div className="grid grid-rows-3 h-full items-center gap-y-10">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className="row-span-1 w-full space-y-6"
-              >
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
+    <div className="mt-30 relative">
+      <AuthWrapper className="bg-transparent">
+        <div className="grid grid-rows-3 h-full items-center gap-y-10">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="row-span-1 w-full space-y-6"
+            >
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <AuthInput phone {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="pin"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex">
                       <FormControl>
-                        <AuthInput phone {...field} />
+                        <AuthInput placeholder="验证码" {...field} />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                      <AuthButton
+                        className="text-base text-center px-4 ml-2 self-center w-28 [:disabled]:bg-primary disabled:opacity-80"
+                        type="button"
+                        disabled={countDown > 0 || sendCodeMutation.isPending}
+                        onClick={handleSendCode}
+                      >
+                        {countDown > 0 ? `${countDown}s` : "发送验证码"}
+                      </AuthButton>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div
+                className="justify-center flex items-center gap-2"
+                style={{
+                  letterSpacing: "0.5px",
+                }}
+              >
+                <Checkbox
+                  checked={isChecked}
+                  className="border-primary bg-white"
+                  onCheckedChange={(checked) =>
+                    setIsChecked(checked === "indeterminate" ? false : checked)
+                  }
                 />
-                <FormField
-                  control={form.control}
-                  name="pin"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex">
-                        <FormControl>
-                          <AuthInput placeholder="验证码" {...field} />
-                        </FormControl>
-                        <AuthButton
-                          className="text-base text-center px-4 ml-2 self-center w-28 [:disabled]:bg-primary disabled:opacity-80"
-                          type="button"
-                          disabled={countDown > 0 || sendCodeMutation.isPending}
-                          onClick={handleSendCode}
-                        >
-                          {countDown > 0 ? `${countDown}s` : "发送验证码"}
-                        </AuthButton>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <AuthButton disabled={loginMutation.isPending} type="submit">
-                  {loginMutation.isPending ? "登录中..." : "登录"}
+                <Label className="gap-0.5">
+                  我已阅读并同意
+                  <Link
+                    to="."
+                    className="text-primary font-bold underline-offset-4 hover:underline"
+                  >
+                    使用协议
+                  </Link>
+                  和
+                  <Link
+                    to="."
+                    className="text-black font-bold underline-offset-4 hover:underline"
+                  >
+                    隐私协议
+                  </Link>
+                </Label>
+              </div>
+              <AuthButton disabled={loginMutation.isPending} type="submit">
+                {loginMutation.isPending ? "登录中..." : "登录"}
+              </AuthButton>
+              <AuthButton variant={"secondary"} asChild>
+                  <Link
+                    search={{
+                      redirect: "/chat",
+                    }}
+                    to="/auth/login/password"
+                  >
+                    密码登录
+                  </Link>
                 </AuthButton>
-                <div
-                  className="justify-center flex items-center gap-2"
-                  style={{
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  <Checkbox
-                    checked={isChecked}
-                    className="border-primary bg-white"
-                    onCheckedChange={(checked) =>
-                      setIsChecked(
-                        checked === "indeterminate" ? false : checked
-                      )
-                    }
-                  />
-                  <Label className="gap-0.5">
-                    我已阅读并同意
-                    <Link
-                      to="."
-                      className="text-primary font-bold underline-offset-4 hover:underline"
-                    >
-                      使用协议
-                    </Link>
-                    和
-                    <Link
-                      to="."
-                      className="text-black font-bold underline-offset-4 hover:underline"
-                    >
-                      隐私协议
-                    </Link>
-                  </Label>
-                </div>
-              </form>
-            </Form>
-          </div>
-        </AuthWrapper>
-      </div>
+            </form>
+          </Form>
+        </div>
+      </AuthWrapper>
     </div>
   );
 }

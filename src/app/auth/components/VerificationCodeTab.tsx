@@ -14,16 +14,17 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import AuthWrapper from "./AuthWrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { AuthContext } from "../layouts/AuthLayout";
+import { AuthContext } from "../context";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import { loginByPhoneVerify } from "@/apis/requests/user/verifiy";
+import { RequestVerify } from "@/apis/requests/user/verifiy";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { sendVerificationCode } from "@/apis/requests/user/code";
-import { userInfoStore } from "@/store/user";
+import { tokenStore } from "@/lib/request";
 
 const FormSchema = z.object({
   pin: z
@@ -36,14 +37,13 @@ const FormSchema = z.object({
 
 export default function VerificationCodeTab({
   onBack,
-}: {
-  onBack: () => void;
-}) {
+}: { onBack: () => void }) {
   const { phone } = useContext(AuthContext);
   const navigate = useNavigate();
-  const search = useSearch({ from: "/auth/login" });
+  const search = useSearch({
+    from: "/auth/login",
+  });
   const [countDown, setCountDown] = useState<number>(60);
-  const userInfo = userInfoStore();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -58,7 +58,7 @@ export default function VerificationCodeTab({
     return () => clearTimeout(timeout);
   }, [countDown]);
   const loginMutation = useMutation({
-    mutationFn: loginByPhoneVerify,
+    mutationFn: RequestVerify,
   });
   const sendCodeMutation = useMutation({
     mutationFn: sendVerificationCode,
@@ -79,7 +79,7 @@ export default function VerificationCodeTab({
           setCountDown(60);
           toast("验证码已重新发送");
         },
-      }
+      },
     );
   }, [sendCodeMutation, phone, form]);
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -97,19 +97,30 @@ export default function VerificationCodeTab({
         },
         onSuccess(data) {
           toast.success("登录成功");
-          userInfo.setCredentials(data);
+          tokenStore.set(data.token);
           // 获取 redirect 参数，如果没有则默认跳转到 /chat
           const redirectUrl = search.redirect || "/chat";
+          if (data.new) {
+            // 提醒需要设置密码
+            toast.success("请设置密码");
+            navigate({
+              to: "/auth/login/password/set",
+              search: {
+                redirect: redirectUrl,
+              },
+            });
+            return;
+          }
           navigate({
             to: redirectUrl,
           });
         },
-      }
+      },
     );
   }
 
   return (
-    <>
+    <AuthWrapper className="aspect-[25/23] grid grid-rows-4">
       <div className="row-span-2 items-center justify-center flex flex-col gap-3">
         <h3 className="text-2xl font-semibold relative w-full text-center">
           <Button
@@ -170,6 +181,6 @@ export default function VerificationCodeTab({
       >
         重新发送{countDown > 0 ? `${countDown}s` : ""}
       </Button>
-    </>
+    </AuthWrapper>
   );
 }
