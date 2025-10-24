@@ -103,12 +103,17 @@ function createAxiosInstance(): AxiosInstance {
           "响应数据格式错误，\n预期: {errcode/code: number, msg: string}",
         );
       }
+      if(payload.code === 1) {
+        // @ts-expect-error compatibility
+        response.data.data.new = true;
+        return response;
+      }
       // 检查业务状态码
       if (payload.code !== 0 && payload.code !== 200) {
         // 特殊处理认证失败
-        if (payload.code === 401) {
+        if (payload.code === 401|| payload.code === 1000) {
           tokenStore.remove();
-          window.location.href = "/auth";
+          window.location.href = "/auth/login";
         }
         const errmsg = payload.msg || "请求失败";
         toast.error(errmsg);
