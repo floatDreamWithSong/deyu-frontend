@@ -1,6 +1,6 @@
 import { createRoute, redirect, Outlet } from "@tanstack/react-router";
 import { rootRoute } from "@/route";
-import { userInfoStore } from "@/store/user";
+import { tokenStore } from "@/lib/request";
 
 // 创建认证布局路由
 export const authenticatedRoute = createRoute({
@@ -8,10 +8,7 @@ export const authenticatedRoute = createRoute({
   id: "_authenticated",
   beforeLoad: ({ location }) => {
     // 实时检查用户认证状态
-    const user = userInfoStore.getState();
-    const isAuthenticated = Boolean(
-      user.token && user.expire > 0 && user.expire * 1000 > Date.now(),
-    );
+    const isAuthenticated = Boolean(tokenStore.get())
 
     if (!isAuthenticated) {
       // 如果未认证，重定向到登录页面，并保存当前路径用于登录后跳转
