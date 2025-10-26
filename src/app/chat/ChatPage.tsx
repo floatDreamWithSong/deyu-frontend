@@ -68,7 +68,7 @@ export default function ChatPage() {
           }}
         >
           <img
-            src="/chat/fake-title.png"
+            src="/chat/fake-title-1.png"
             alt="高科芯·德育大模型"
             className="max-h-16 select-none"
           />

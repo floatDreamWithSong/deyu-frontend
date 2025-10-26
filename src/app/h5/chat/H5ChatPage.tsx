@@ -73,7 +73,7 @@ const H5ChatPage = () => {
     <div className="flex flex-col justify-between h-full">
       <div className="h-1/5 flex justify-center items-center">
         <img
-          src="/fake-auth-title.png"
+          src="/fake-auth-title-1.png"
           className="w-4/5"
           alt="张江高科德育大模型"
         />

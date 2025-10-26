@@ -17,7 +17,7 @@ function LayoutContent() {
         <div className="flex items-center justify-center rounded-t-2xl relative">
           <div className="space-y-4 transform w-full flex flex-col items-center">
             <img
-              src="/fake-auth-title.png"
+              src="/fake-auth-title-1.png"
               className="w-4/5"
               alt="张江高科德育大模型"
             />
@@ -36,7 +36,7 @@ function LayoutContent() {
       <div className="flex items-center justify-center">
         <div className="space-y-4 transform -translate-y-10 w-full flex flex-col items-center">
           <img
-            src="/fake-auth-title.png"
+            src="/fake-auth-title-1.png"
             className="w-2/3"
             alt="张江高科德育大模型"
           />
