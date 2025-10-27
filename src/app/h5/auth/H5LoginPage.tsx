@@ -3,7 +3,7 @@ import AuthButton from "@/app/auth/components/AuthButton";
 import { AuthInput } from "@/app/auth/components/AuthInput";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useState, useCallback, useEffect } from "react";
 import z from "zod";
 import { mobileSchema } from "@/utils/schema";
@@ -33,6 +33,7 @@ const formSchema = z.object({
     }),
 });
 export default function H5LoginPage() {
+  const search = useSearch({ from: "/auth/login" });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -205,15 +206,10 @@ export default function H5LoginPage() {
                 {loginMutation.isPending ? "登录中..." : "登录"}
               </AuthButton>
               <AuthButton variant={"secondary"} asChild>
-                  <Link
-                    search={{
-                      redirect: "/chat",
-                    }}
-                    to="/auth/login/password"
-                  >
-                    密码登录
-                  </Link>
-                </AuthButton>
+                <Link search={search} to="/auth/login/password">
+                  密码登录
+                </Link>
+              </AuthButton>
             </form>
           </Form>
         </div>

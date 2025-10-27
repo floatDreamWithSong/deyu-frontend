@@ -156,9 +156,7 @@ export default function PhonePasswordLoginPage() {
               </AuthButton>
               <AuthButton variant={"secondary"} asChild>
                 <Link
-                  search={{
-                    redirect: "/chat",
-                  }}
+                  search={search}
                   to="/auth/login"
                 >
                   验证码登录

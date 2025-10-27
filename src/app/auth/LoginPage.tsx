@@ -3,7 +3,7 @@ import AuthButton from "@/app/auth/components/AuthButton";
 import { AuthInput } from "@/app/auth/components/AuthInput";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Link } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { useCallback, useContext, useState } from "react";
 import { AuthContext } from "@/app/auth/context";
 import z from "zod";
@@ -31,6 +31,9 @@ const formSchema = z.object({
   phone: mobileSchema,
 });
 function LoginPagePC() {
+  const search = useSearch({
+    from: "/auth/login",
+  });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -130,9 +133,7 @@ function LoginPagePC() {
                 </AuthButton>
                 <AuthButton variant={"secondary"} asChild>
                   <Link
-                    search={{
-                      redirect: "/chat",
-                    }}
+                    search={search}
                     to="/auth/login/password"
                   >
                     密码登录
