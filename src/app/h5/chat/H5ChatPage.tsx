@@ -1,9 +1,9 @@
 import { createConversation } from "@/apis/requests/conversation/create";
 import UserPromptTextarea from "@/app/chat/components/UserPromptTextarea";
-import { cardList, type Card } from "@/app/chat/constants";
+import { cardList, modelMap, type Card } from "@/app/chat/constants";
 import Stack from "@/components/Stack";
 import { useInitMessageStore } from "@/store/initMessage";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import type { ChatStatus } from "ai";
 import { useEffect, useCallback, useRef, useState } from "react";
 import "./agent-card.css";
@@ -13,9 +13,38 @@ const H5ChatPage = () => {
   const [status, setStatus] = useState<ChatStatus>("ready");
   const signal = useRef<AbortController | null>(null);
   const { setInitMessage, setModel } = useInitMessageStore();
+  const { model } = useSearch({ from: "/_authenticated/chat/" });
+  const [cards, setCards] = useState<Card[]>([
+    ...cardList,
+    {
+      description: "高科芯 · 德育大模型",
+      imgUrl: "/chat/bot.png",
+      model: "deyu-default",
+      name: "",
+    },
+  ]);
   useEffect(() => {
-    setModel("deyu-default", "");
-  }, [setModel]);
+    setModel(
+      model ?? "deyu-default",
+      modelMap.get(model ?? "deyu-default") ?? ""
+    );
+    if (model)
+      setCards((c) => {
+        const initCards = [...c];
+        const currentModel = model ?? "deyu-default";
+        const targetIndex = initCards.findIndex(
+          (card) => card.model === currentModel
+        );
+
+        // 如果找到了目标卡片且不在最后一个位置，则移动到最后一个位置
+        if (targetIndex !== -1 && targetIndex !== initCards.length - 1) {
+          const [targetCard] = initCards.splice(targetIndex, 1);
+          initCards.push(targetCard);
+        }
+
+        return initCards;
+      });
+  }, [setModel, model]);
   const abortRequest = useCallback(() => {
     if (signal.current) {
       setStatus("ready");
@@ -50,15 +79,6 @@ const H5ChatPage = () => {
       }
     }
   };
-  const [cards, setCards] = useState<Card[]>([
-    ...cardList,
-    {
-      description: "张江·高科芯 德育大模型",
-      imgUrl: "/chat/bot.png",
-      model: "deyu-default",
-      name: "",
-    },
-  ]);
 
   const sendToBack = (id: string) => {
     const newCards = [...cards];

@@ -1,6 +1,7 @@
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import authenticatedRoute from "../../_authenticated/route";
+import type { AvaliableModelName } from "@/store/initMessage";
 const chatRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: "/chat",
@@ -10,6 +11,9 @@ const chatRoute = createRoute({
 const chatIndexRoute = createRoute({
   getParentRoute: () => chatRoute,
   path: "/",
+  validateSearch: (search: {model?: AvaliableModelName})=>{
+    return search
+  },
   component: lazyRouteComponent(() => import("./H5ChatPage")),
 });
 

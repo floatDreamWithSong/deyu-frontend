@@ -1,6 +1,7 @@
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import authenticatedRoute from "../_authenticated/route";
+import type { AvaliableModelName } from "@/store/initMessage";
 const chatRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   path: "/chat",
@@ -11,6 +12,9 @@ const chatIndexRoute = createRoute({
   getParentRoute: () => chatRoute,
   path: "/",
   component: lazyRouteComponent(() => import("./ChatPage")),
+  validateSearch: (search: {model?: AvaliableModelName})=>{
+    return search
+  },
 });
 
 const conversationRoute = createRoute({

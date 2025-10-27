@@ -3,12 +3,12 @@
 import { createConversation } from "@/apis/requests/conversation/create";
 import UserPromptTextarea from "@/app/chat/components/UserPromptTextarea";
 import { useInitMessageStore } from "@/store/initMessage";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import type { ChatStatus } from "ai";
 import { useCallback, useEffect, useRef, useState } from "react";
 import AgentCard from "./components/AgentCard";
 import { cn } from "@/lib/utils";
-import { cardList } from "./constants";
+import { cardList, modelMap } from "./constants";
 import H5ChatPage from "../h5/chat/H5ChatPage";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -17,9 +17,10 @@ export default function ChatPage() {
   const [status, setStatus] = useState<ChatStatus>("ready");
   const signal = useRef<AbortController | null>(null);
   const { setInitMessage, model, setModel } = useInitMessageStore();
+  const {model: searchModel} = useSearch({from: '/_authenticated/chat/'})
   useEffect(() => {
-    setModel("deyu-default", "");
-  }, [setModel]);
+    setModel(searchModel ?? "deyu-default", modelMap.get(searchModel ?? "deyu-default") ?? "");
+  }, [setModel, searchModel]);
   const abortRequest = useCallback(() => {
     if (signal.current) {
       setStatus("ready");

@@ -297,7 +297,7 @@ export default function ChatSidebar() {
         <div className="flex items-center justify-around px-2 gap-2 pt-10">
           <div className="flex items-center gap-2">
             <h2 className="text-primary font-semibold text-2xl">
-              张江高科 <strong>·</strong> 高科芯
+            高科芯 <strong>·</strong> 德育大模型
             </h2>
           </div>
           {state === "expanded" && (
