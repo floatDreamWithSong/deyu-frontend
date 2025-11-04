@@ -18,7 +18,7 @@ const H5ChatPage = () => {
     ...cardList,
     {
       description: "高科芯 · 德育大模型",
-      imgUrl: "/chat/bot.png",
+      imgUrl: "/chats/bot.png",
       model: "deyu-default",
       name: "",
     },

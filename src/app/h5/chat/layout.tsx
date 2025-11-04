@@ -10,7 +10,7 @@ const sidebarWidth = "380px";
 export default function Layout() {
   return (
     <div
-      style={{ backgroundImage: "url(/chat/h5-bg.png)" }}
+      style={{ backgroundImage: "url(/chats/h5-bg.png)" }}
       className="w-full h-full bg-cover bg-center bg-no-repeat"
     >
       <SidebarProvider

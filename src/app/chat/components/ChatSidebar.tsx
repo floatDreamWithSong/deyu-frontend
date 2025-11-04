@@ -289,7 +289,7 @@ export default function ChatSidebar() {
       <SidebarHeader className="space-y-4 relative">
         {!isMobile && (
           <img
-            src="/chat/bot.png"
+            src="/chats/bot.png"
             alt="bot"
             className="absolute left-2 h-[5.6rem] top-0 -translate-y-7/12"
           />
@@ -432,7 +432,7 @@ export default function ChatSidebar() {
         />
         <img
           className="size-13 absolute right-0 top-1/2 translate-x-1 -translate-y-1/2"
-          src="/chat/search.png"
+          src="/chats/search.png"
           alt="搜索"
         />
       </div>

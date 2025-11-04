@@ -12,7 +12,7 @@ function LayoutContent() {
     return (
       <div
         className="h-screen w-screen overflow-hidden flex flex-col pt-30 bg-cover bg-center bg-no-repeat items-center"
-        style={{ backgroundImage: "url(/chat/h5-bg.png)" }}
+        style={{ backgroundImage: "url(/chats/h5-bg.png)" }}
       >
         <div className="flex items-center justify-center rounded-t-2xl relative">
           <div className="space-y-4 transform w-full flex flex-col items-center">
@@ -30,7 +30,7 @@ function LayoutContent() {
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed relative grid grid-cols-2"
-      style={{ backgroundImage: "url(/chat/bg.png)" }}
+      style={{ backgroundImage: "url(/chats/bg.png)" }}
     >
       {/* 左侧品牌名 */}
       <div className="flex items-center justify-center">
