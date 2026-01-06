@@ -131,7 +131,7 @@ export default function H5LoginPage() {
   };
   return (
     <div className="mt-30 relative">
-      <AuthWrapper className="bg-transparent">
+      <AuthWrapper className="bg-transparent max-w-full p-8">
         <div className="grid grid-rows-3 h-full items-center gap-y-10">
           <Form {...form}>
             <form
@@ -144,7 +144,7 @@ export default function H5LoginPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <AuthInput phone {...field} />
+                      <AuthInput className="text-sm" phone {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,10 +157,10 @@ export default function H5LoginPage() {
                   <FormItem>
                     <div className="flex">
                       <FormControl>
-                        <AuthInput placeholder="验证码" {...field} />
+                        <AuthInput className="text-sm" placeholder="验证码" {...field} />
                       </FormControl>
                       <AuthButton
-                        className="text-base text-center px-4 ml-2 self-center w-28 [:disabled]:bg-primary disabled:opacity-80"
+                        className="text-sm text-center px-4 ml-2 self-center w-28 [:disabled]:bg-primary disabled:opacity-80"
                         type="button"
                         disabled={countDown > 0 || sendCodeMutation.isPending}
                         onClick={handleSendCode}
@@ -185,7 +185,7 @@ export default function H5LoginPage() {
                     setIsChecked(checked === "indeterminate" ? false : checked)
                   }
                 />
-                <Label className="gap-0.5">
+                <Label className="gap-0.5 text-xs">
                   我已阅读并同意
                   <Link
                     to="."
